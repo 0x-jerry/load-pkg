@@ -6,9 +6,9 @@ loadPkg(path.join(__dirname, '../example'))
 export async function loadPkg(dir: string) {
   const absPath = path.isAbsolute(dir) ? dir : path.resolve(dir)
 
-  const files = await findPackageFiles(absPath)
+  const file = await findPackageFiles(absPath)
 
-  console.log(files)
+  console.log(file)
 
   return []
 }
@@ -19,7 +19,7 @@ async function findPackageFiles(absPath: string) {
   let dir = absPath
   const rootDir = path.parse(dir).root
 
-  const files: PackageFileConfig[] = []
+  let file: PackageFileConfig | null = null
 
   while (dir !== rootDir) {
     try {
@@ -30,12 +30,19 @@ async function findPackageFiles(absPath: string) {
       })
 
       const json = JSON.parse(res)
-      const isMonoRepo = !!json.workspaces
+      const isMonorepo = !!json.workspaces
 
-      files.push({
-        path: pkgPath,
-        monorepo: isMonoRepo,
-      })
+      if (file) {
+        file.parent = {
+          path: pkgPath,
+          monorepo: isMonorepo,
+        }
+      } else {
+        file = {
+          path: pkgPath,
+          monorepo: isMonorepo,
+        }
+      }
     } catch (e) {
       // ignore
     } finally {
@@ -43,10 +50,11 @@ async function findPackageFiles(absPath: string) {
     }
   }
 
-  return files
+  return file
 }
 
 interface PackageFileConfig {
   path: string
   monorepo: boolean
+  parent?: PackageFileConfig
 }
