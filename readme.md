@@ -14,12 +14,15 @@ output:
 ```json
 {
   "path": "<root-path>/example/packages/pkg1/package.json",
+  "config": {}, // content of `package.json`
   "monorepo": false,
   "parent": {
     "path": "<root-path>/example/package.json",
+    "config": {}, // content of `package.json`
     "monorepo": true,
     "parent": {
       "path": "<root-path>/package.json",
+      "config": {}, // content of `package.json`
       "monorepo": false
     }
   }
