@@ -1,7 +1,7 @@
 {
   "name": "@0x-jerry/load-pkg",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Detect the closest `package.json` recursively.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -12,13 +12,16 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "release": "x-release"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/0x-jerry/tpl-ts-sdk/issues"
+  "author": "0x-jerry <x.jerry.wang@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0x-jerry/load-pkg.git"
   },
-  "homepage": "https://github.com/0x-jerry/tpl-ts-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/0x-jerry/load-pkg/issues"
+  },
+  "homepage": "https://github.com/0x-jerry/load-pkg#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
