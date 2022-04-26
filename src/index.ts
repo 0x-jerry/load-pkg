@@ -1,29 +1,25 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-loadPkg(path.join(__dirname, '../example'))
-
 export async function loadPkg(dir: string) {
   const absPath = path.isAbsolute(dir) ? dir : path.resolve(dir)
 
   const file = await findPackageFiles(absPath)
 
-  console.log(file)
-
-  return []
+  return file
 }
 
 async function findPackageFiles(absPath: string) {
-  const name = 'package.json'
+  const rootDir = path.parse(absPath).root
 
   let dir = absPath
-  const rootDir = path.parse(dir).root
 
-  let file: PackageFileConfig | null = null
+  let currentConf: PackageFile | null = null
+  let rootConf: PackageFile | null = null
 
   while (dir !== rootDir) {
     try {
-      const pkgPath = path.join(dir, name)
+      const pkgPath = path.join(dir, 'package.json')
 
       const res = await fs.readFile(pkgPath, {
         encoding: 'utf-8',
@@ -32,16 +28,16 @@ async function findPackageFiles(absPath: string) {
       const pkg = JSON.parse(res)
       const isMonorepo = !!pkg.workspaces || (await isPnpmWorkspaceExist(dir))
 
-      if (file) {
-        file.parent = {
-          path: pkgPath,
-          monorepo: isMonorepo,
-        }
+      const conf: PackageFile = {
+        path: pkgPath,
+        monorepo: isMonorepo,
+      }
+
+      if (currentConf) {
+        currentConf.parent = conf
+        currentConf = conf
       } else {
-        file = {
-          path: pkgPath,
-          monorepo: isMonorepo,
-        }
+        rootConf = currentConf = conf
       }
     } catch (e) {
       // ignore
@@ -50,21 +46,32 @@ async function findPackageFiles(absPath: string) {
     }
   }
 
-  return file
+  return rootConf
 }
 
 async function isPnpmWorkspaceExist(absDir: string) {
   const workspacesPath = path.join(absDir, 'pnpm-workspace.yaml')
   try {
-    await fs.access(workspacesPath)
+    await fs.lstat(workspacesPath)
     return true
   } catch (error) {
     return false
   }
 }
 
-interface PackageFileConfig {
+export interface PackageFile {
+  /**
+   * File path of `package.json`.
+   */
   path: string
+  /**
+   * Whether current directory has a monorepo config.
+   *
+   * Support check `pnpm-workspace.yaml` and `package.json#workspaces`.
+   */
   monorepo: boolean
-  parent?: PackageFileConfig
+  /**
+   * The parent `package.json` file if it exists.
+   */
+  parent?: PackageFile
 }
