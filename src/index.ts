@@ -29,8 +29,8 @@ async function findPackageFiles(absPath: string) {
         encoding: 'utf-8',
       })
 
-      const json = JSON.parse(res)
-      const isMonorepo = !!json.workspaces || (await checkPnpmWorkspace(dir))
+      const pkg = JSON.parse(res)
+      const isMonorepo = !!pkg.workspaces || (await isPnpmWorkspaceExist(dir))
 
       if (file) {
         file.parent = {
@@ -53,7 +53,7 @@ async function findPackageFiles(absPath: string) {
   return file
 }
 
-async function checkPnpmWorkspace(absDir: string) {
+async function isPnpmWorkspaceExist(absDir: string) {
   const workspacesPath = path.join(absDir, 'pnpm-workspace.yaml')
   try {
     await fs.access(workspacesPath)
