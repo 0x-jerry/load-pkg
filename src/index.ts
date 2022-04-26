@@ -79,5 +79,5 @@ export interface PackageFile {
   /**
    * Content of `package.json`
    */
-  config: Record<string, string>
+  config: Record<string, any>
 }
