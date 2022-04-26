@@ -1,6 +1,6 @@
 {
   "name": "@0x-jerry/load-pkg",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Detect the closest `package.json` recursively.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
