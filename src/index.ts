@@ -31,6 +31,7 @@ async function findPackageFiles(absPath: string) {
       const conf: PackageFile = {
         path: pkgPath,
         monorepo: isMonorepo,
+        config: pkg,
       }
 
       if (currentConf) {
@@ -74,4 +75,9 @@ export interface PackageFile {
    * The parent `package.json` file if it exists.
    */
   parent?: PackageFile
+
+  /**
+   * Content of `package.json`
+   */
+  config: Record<string, string>
 }
