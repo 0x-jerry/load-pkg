@@ -9,27 +9,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
+        uses: pnpm/action-setup@v4.0.0
+        with:
+          version: 8
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-          registry-url: https://registry.npm.taobao.org
+          node-version: 20
           cache: 'pnpm'
 
       - run: pnpm i
 
-      - run: pnpm run test:coverage
-
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          files: ./coverage/clover.xml # optional
-          flags: unittests # optional
-          name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: false # optional (default = false)
+      - run: pnpm run test
