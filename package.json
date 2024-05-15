@@ -2,6 +2,7 @@
   "name": "@0x-jerry/load-pkg",
   "version": "0.1.2",
   "description": "Detect the closest `package.json` recursively.",
+  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -9,7 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsc -p tsconfig.build.json",
     "release": "x-release"
   },
   "license": "MIT",
@@ -29,12 +30,17 @@
   "files": [
     "dist"
   ],
+  "release": {
+    "clean": [
+      "dist"
+    ]
+  },
   "devDependencies": {
-    "@0x-jerry/x-release": "^0.3.2",
-    "@types/node": "^17.0.25",
-    "c8": "^7.11.2",
-    "tsup": "^5.12.6",
-    "typescript": "^4.6.3",
-    "vitest": "^0.9.4"
+    "@0x-jerry/x-release": "^2.2.0",
+    "@types/node": "^20.12.12",
+    "c8": "^9.1.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   }
 }
