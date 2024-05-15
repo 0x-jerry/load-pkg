@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build",
     "build": "tsc -p tsconfig.build.json",
     "release": "x-release"
   },
